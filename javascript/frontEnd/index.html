@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> my html5 practice </title>
+    <meta chcharset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./fontawesome/css/font-awesome.css" rel="stylesheet">
+<!--    <script src="./dist/js/bootstrap.min.js"></script>s-->
+</head>
+    
+<body>
+    <div class="row">
+        <div class="col-md-3"><h1> menu </h1></div>
+        <div class="col-md-9">
+            <h2><div class="fa fa-glass"></div> Nginx static file on nodeJs </h2>
+            <p> nginx 的強大在於它的運作模式是類似於nodejs的event-driven；基於這樣的特色，加上用c語言實作的高效；讓nginx在處理request 時能夠更快速且不阻塞目前的process</p>
+            <img  class="img-responsive" src="https://d262ilb51hltx0.cloudfront.net/max/2000/1*8f1tcmEnqS2UyJJJxJlJhQ.jpeg"></img>
+<!--            <img  class="img-responsive" src="http://canvas.co/assets/img/backgrounds/cowork.jpg"></img>-->
+            <h2> why nginx for nodejs ? </h2>
+            <p> 事實上，nodejs的http module已經實作的非常完整，即使不靠nginx也能夠運作正常；然而nodejs的強項在於處理i/o 類的request，而身為web server又必須壓縮網頁內容，建立https的secure連線，以及讀取並轉送大量的靜態檔… </p>
+            <p>這些都必須大量使用到cpu 資源的，所以對nodejs而言反而是個負擔；然而這些tasks 對nginx而言卻是小菜一碟，用c語言實作的nginx剛剛好…</p>
+            
+        </div>
+    </div>;
+</body>
+    
+</html>
