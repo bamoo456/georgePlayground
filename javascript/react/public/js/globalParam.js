@@ -1,0 +1,2 @@
+var commentSocket = new EventProxy();
+
