@@ -12,12 +12,17 @@ var mainApp = React.createClass({
      * after mixin, mainApp can have this.getStore()
      */
     mixins: [FluxibleMixin],
+    static: {
+        storeListeners: [MainAppStore]
+    },
 
     getInitialState: function() {
         return this.getStore(MainAppStore).getState();
     },
 
     onChange: function(){
+        var state = this.getStore(MainAppStore).getState();
+        this.setState(state);
     },
 
     render: function(){

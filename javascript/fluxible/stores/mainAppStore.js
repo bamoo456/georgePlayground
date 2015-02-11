@@ -41,6 +41,16 @@ var ApplicationStore = createStore({
             pages: this.pages,
             route: this.currentRoute
         };
+    },
+
+    dehydrate: function () {
+        return this.getState();
+    },
+    rehydrate: function (state) {
+        this.currentPageName = state.currentPageName;
+        this.currentPage = state.currentPage;
+        this.pages = state.pages;
+        this.currentRoute = state.route;
     }
 });
  

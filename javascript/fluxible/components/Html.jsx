@@ -16,6 +16,8 @@ module.exports = React.createClass({
         </head>
         <body>
           <div id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
+          <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
+          <script src="bundle.js" defer></script>
         </body>
       </html>
     );
