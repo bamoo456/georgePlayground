@@ -6,9 +6,9 @@ var notify = require('gulp-notify');
 var reactify = require('reactify');
 var watchify = require('watchify');
 var gulpif = require('gulp-if');
-var sass = require('gulp-sass');
 var compass = require('gulp-compass');
-var htmlreplace = require('gulp-html-replace');
+var nodemon = require('gulp-nodemon');
+var livereload = require('gulp-livereload');
 /************************************************
  *
  *          environment Configuration
@@ -19,12 +19,10 @@ var htmlreplace = require('gulp-html-replace');
  * exec: npm run-script debug/dev/prod
  *
  * environment
- *  "prod", "dev", "debug"
+ *  "prod", "dev"
  */
 var env = process.env.NODE_ENV || 'dev';
-var prodBuild = ['scripts', 'compass', 'copy'];
-var devBuild = ['watchScripts', 'compass', 'copy', 'watch'];
-var task = prodBuild;
+
 /**
  * path
  */
@@ -36,20 +34,22 @@ var paths = {
     destCSS: './build/assets/css'
 };
 
-/**
- * for dev env settings:
- *     simply start an web server on port 8080
- */
-if (env === 'dev') {
-    var connect = require('gulp-connect');
-    connect.server({
-        root: paths.destDir,
-        https: true,
-        livereload: true
-    });
-    reload = connect.reload;
-    task = devBuild;
-}
+var watchConfig = [
+    './**/*',
+    '!./node_modules/**/*',
+    '!./build/**/*',
+    '!./gulpfile.js'
+];
+
+var nodemonConfig = {
+    script: './env/server.js',
+    ext: 'js jsx scss',
+    ignore: [
+        './node_modules/**/*',
+        './build/**/*',
+        'gulpfile.js'
+    ]
+};
 
 /************************************************
  *
@@ -97,7 +97,7 @@ function scripts(watch) {
         if (env === 'prod') {
             return stream.pipe(gulp.dest(paths.destDir));
         }
-        return stream.pipe(gulp.dest(paths.destDir)).pipe(connect.reload());
+        return stream.pipe(gulp.dest(paths.destDir)).pipe(livereload());
     };
 
     bundler.on('update', rebundle);
@@ -128,52 +128,36 @@ gulp.task('watchScripts', function() {
  * @Description: auto build sass file to css
  */
 gulp.task('compass', function() {
-  gulp.src(paths.sass)
-    .pipe(compass({
-      css: 'app/assets/css',
-      sass: 'app/assets/scss',
-      image: 'app/assets/images'
-    }))
-    .pipe(minifyCSS({
+    gulp.src(paths.sass)
+        .pipe(compass({
+            css: './assets/css',
+            sass: './assets/scss',
+            image: './assets/images'
+        }))
+        .pipe(minifyCSS({
             noAdvanced: false,
             keepBreaks: true,
             cache: true // this add-on is gulp only
         }))
-    .pipe(gulp.dest(paths.destCSS));
+        .pipe(gulp.dest(paths.destCSS));
 });
 
 /**
- * Gulp Task
- * @Author: George_Chen
- * @Description: copy current app/*.html to build folder
- *     NOTE: for production build, we remove the all devTags on html file
+ *  production task
  */
-gulp.task('copy', function() {
-    gulp.src('app/*.html')
-        .pipe(gulpif(env === 'prod', htmlreplace({
-            'dev': ''
-        })))
-        .pipe(gulp.dest(paths.destDir));
-    gulp.src('app/lib/*.js')
-        .pipe(gulp.dest(paths.destDir+'/lib/'));
-});
+gulp.task('prod', ['scripts', 'compass']);
 
 /**
- * Gulp Task
- * @Author: George_Chen
- * @Description: trigger the page reload, only trigger on "dev"
+ *  development task
  */
-gulp.task('reload', function() {
-    gulp.src(paths.destDir + '/*.html').pipe(connect.reload());
-});
-
-/**
- * Gulp Task
- * @Author: George_Chen
- * @Description: monitor files in app, any changed will build again
- */
-gulp.task('watch', function() {
-    gulp.watch('app/**/*', ['compass', 'copy', 'reload']);
+gulp.task('dev', ['watchScripts', 'compass'], function(){
+    livereload.listen();
+    nodemon(nodemonConfig)
+        .on('change', ['compass'])
+        .on('restart', function() {
+            console.log('restarted!, reload the page')
+            gulp.src('./bind/bundle.js').pipe(livereload());
+        });
 });
 
 /************************************************
@@ -182,4 +166,4 @@ gulp.task('watch', function() {
  *
  ************************************************/
 
-gulp.task('default', task);
+gulp.task('default', [env]);
