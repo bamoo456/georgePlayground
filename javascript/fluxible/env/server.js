@@ -38,18 +38,16 @@ server.use(function(req, res, next) {
         // get the app component (mainApp.jsx)
         var appComponent = app.getAppComponent();
 
-        // render the appComponent to an 'html' template
-        var html = React.renderToStaticMarkup(HtmlComponent({
-                // import the dehydrate state
+        return React.withContext(context.getComponentContext(), function(){
+            // render the appComponent to an 'html' template
+            var html = React.renderToStaticMarkup(HtmlComponent({
                 state: exposed,
-
-                // markup will be seen as the "this.props.markup" in HtmlComponent
-                markup: React.renderToString(appComponent({
-                    // context will be seen as the "this.props.context" in appComponent
-                    context: context.getComponentContext()
-                }))
+                markup: React.renderToString(appComponent())
             }));
-        res.send(html);
+
+            res.write(html);
+            res.end();
+        });
     });
 });
 
