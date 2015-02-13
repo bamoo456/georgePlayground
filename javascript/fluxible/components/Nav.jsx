@@ -1,38 +1,18 @@
-
 var React = require('react');
-var NavLink = require('flux-router-component').NavLink;
- 
+var Link = require('react-router').Link;
+var StateMixin = require('react-router').State;
+
 var Nav = React.createClass({
-  getInitialState: function () {
-    return {
-      selected: 'home',
-      links: {}
-    };
-  },
-  render: function() {
-    var selected = this.props.selected || this.state.selected,
-    links = this.props.links || this.state.links,
-    context = this.props.context,
-    linkHTML = Object.keys(links).map(function (name) {
-      var className = '',
-      link = links[name];
-      if (selected === name) {
-        className = 'pure-menu-selected';
-      }
-      return (
-        <li className={className} key={link.path}>
-          <NavLink href={link.path} routeName={link.page} context={context}>
-            {link.label} {name}
-          </NavLink>
-        </li>
-      );
-    });
-    return (
-      <ul className="pure-menu pure-menu-open pure-menu-horizontal">
-        {linkHTML}
-      </ul>
-    );
-  }
+    mixins: [StateMixin],
+    render: function() {
+        // use react-router mixin to handle the view on Nav
+        return (
+            <ul className="pure-menu pure-menu-open pure-menu-horizontal">
+                <li className={this.isActive('/') ? 'pure-menu-selected' : ''}><Link to='/'>Home</Link></li>
+                <li className={this.isActive('/about') ? 'pure-menu-selected' : ''}><Link to='/about'>About</Link></li>
+            </ul>
+        );
+    }
 });
  
 module.exports = Nav;

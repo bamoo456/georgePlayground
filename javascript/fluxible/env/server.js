@@ -10,44 +10,35 @@ require('node-jsx').install({
 
 // require the fluxible app
 var app = require('./app');
-
 var React = require('react');
-
-
 var HtmlComponent = React.createFactory(require('../components/Html.jsx'));
+var navigateAction = require('../actions/navigate');
+var Router = require('react-router');
 
-
-var navigateAction = require('flux-router-component').navigateAction;
 
 server.use(express.static(__dirname + '/../build'));
 
 server.use(function(req, res, next) {
     var context = app.createContext();
-    context.executeAction(navigateAction, {
-        url: req.url
-    }, function(err){
-        if (err) {
-            if (err.status && err.status === 404) {
-                return next();
-            }
-            return next(err);
-        }
-        // for all registered stores, call the 'dehydrate' function
-        var exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
 
-        // get the app component (mainApp.jsx)
-        var appComponent = app.getAppComponent();
+    // start the react-router
+    Router.run(app.getAppComponent(), req.path, function(Handler, state){
+        context.executeAction(navigateAction, state, function(){
+            // for all registered stores, call the 'dehydrate' function
+            var exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
 
-        return React.withContext(context.getComponentContext(), function(){
-            // render the appComponent to an 'html' template
-            var html = React.renderToStaticMarkup(HtmlComponent({
-                state: exposed,
-                markup: React.renderToString(appComponent())
-            }));
 
-            res.write(html);
-            res.end();
-        });
+            React.withContext(context.getComponentContext(), function(){
+                // render the appComponent to an 'html' template
+                var html = React.renderToStaticMarkup(HtmlComponent({
+                    state: exposed,
+                    markup: React.renderToString(React.createFactory(Handler)())
+                }));
+
+                res.write(html);
+                res.end();
+            });
+        })
     });
 });
 

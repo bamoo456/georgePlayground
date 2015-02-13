@@ -5,6 +5,7 @@ var Home = require('./Home.jsx');
 var About = require('./About.jsx');
 var Nav = require('./Nav.jsx');
 var FluxibleMixin = require('fluxible').Mixin;
+var RouteHandler = require('react-router').RouteHandler;
 
 var mainApp = React.createClass({
 
@@ -31,10 +32,11 @@ var mainApp = React.createClass({
     },
 
     render: function(){
+        // RouteHandler will take care of Routes while url change
         return (
             <div>
-                <Nav selected={this.state.currentPageName} links={this.state.pages} context={this.props.context}/>
-                {'home' === this.state.currentPageName ? <Home /> : <About /> }
+                <Nav />
+                <RouteHandler />
             </div>
         );
     }
