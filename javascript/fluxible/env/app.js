@@ -1,5 +1,6 @@
 var React = require('react');
 var Fluxible = require('fluxible');
+var routePlugin = require('../routes/routePlugin');
 
 /**
  * create an fluxible application
@@ -7,13 +8,11 @@ var Fluxible = require('fluxible');
 var app = new Fluxible({
     appComponent: require('../configs/Routes.jsx')
 });
- 
+
 /**
- * import the route plugin
+ * import the data plugin
  */
-// app.plug(routrPlugin({
-//     routes: require('../configs/routes')
-// }));
+app.plug(routePlugin);
 
 /**
  * register stores
