@@ -26,7 +26,7 @@
 
 #   Set Paths
 #   ------------------------------------------------------------
-    export PATH="/usr/local/git/bin/:$PATH:/usr/local/bin/:/opt/local/bin/:/usr/local/bin/mongodb/:/usr/local/bin/redis/"
+    export PATH="/usr/local/git/bin/:$PATH:/usr/local/bin/:/opt/local/bin/:/usr/local/bin/mongodb/:/usr/local/bin/redis/:/usr/local/mysql/bin:/Users/georgechen/golang_path/bin:/Library/PostgreSQL/9.4/bin"
     # export PATH="/usr/local/git/bin:/sw/bin/:/usr/local/bin:/usr/local/:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 
 	# system default: /opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
@@ -50,7 +50,7 @@
 #   -----------------------------
 #   2.  MAKE TERMINAL BETTER
 #   -----------------------------
-alias ll = 'ls -al'
+#alias ll = 'ls -al'
 alias cp='cp -iv'                           # Preferred 'cp' implementation
 alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
@@ -314,3 +314,39 @@ export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 # Finished adapting your PATH environment variable for use with MacPorts.
 
+. ~/nvm/nvm.sh
+
+# mysql env
+#alias mysql='/usr/local/mysql/bin/mysql'  
+#alias mysqladmin='/usr/local/mysql/bin/mysqladmin'  
+
+#golang env
+export PATH="/usr/local/go/bin:$PATH"
+export GOPATH=$HOME/golang_path
+export GO15VENDOREXPERIMENT=1
+
+#MacVim
+#alias mvim="/Applications/MacVim.app/contents/MacOS/MacVim"
+alias mvim="open -a MacVim.app $1"
+
+# for ruby environment
+export GEM_HOME="/usr/local/bin"
+
+##
+# Your previous /Users/georgechen/.bash_profile file was backed up as /Users/georgechen/.bash_profile.macports-saved_2016-06-18_at_13:19:55
+##
+
+# MacPorts Installer addition on 2016-06-18_at_13:19:55: adding an appropriate PATH variable for use with MacPorts.
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+# Finished adapting your PATH environment variable for use with MacPorts.
+
+# setup android home dir
+export ANDROID_HOME="$HOME/Library/Android/sdk/"
+export PATH="~/Library/Android/sdk/tools:~/Library/Android/sdk/platform-tools:${PATH}"
+
+
+# The next line updates PATH for the Google Cloud SDK.
+source '/Users/georgechen/playground/k8s/google-cloud-sdk/path.bash.inc'
+
+# The next line enables shell command completion for gcloud.
+source '/Users/georgechen/playground/k8s/google-cloud-sdk/completion.bash.inc'
